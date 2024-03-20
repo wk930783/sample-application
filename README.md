@@ -25,3 +25,12 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+
+## 專案資料夾結構
+app/common-components 存放共用元件與基礎元件
+app/models 存放資料模型
+app/pages 功能頁面
+app/pages/component 存放該頁面使用的元件
+app/services 存放全域狀態或是API call的服務
+
