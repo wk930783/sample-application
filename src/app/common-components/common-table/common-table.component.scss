@@ -1,0 +1,62 @@
+.common-table {
+  position: relative;
+  width:100%;
+  height: 100%;
+}
+
+.common-table-button-set {
+  color: white;
+}
+.table-outside {
+  &-min {
+    height: calc(100% - 56px - 42px);
+    max-height: calc(100% - 56px - 42px);
+  }
+  height: calc(100% - 56px);
+  max-height: calc(100% - 56px);
+  overflow: auto;
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  // 總數tr
+  .total-tr {
+    border: 2px solid #009CAD;
+    > td {
+      border: unset;
+    }
+  }
+  td,th {
+    vertical-align: middle;
+    color: black !important;
+    text-align: left;
+    border: 2px solid #009CAD;
+    padding: 8px 6px;
+  }
+  .td-content {
+    word-wrap: break-word;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3; /* 設定最大行數為 3 行 */
+    overflow: hidden;
+  }
+  }
+.operate-button {
+  min-height: 32px !important;
+}
+.align-items-center {
+  align-items: center;
+  -webkit-align-items: center;
+}
+.justify-content-between {
+  justify-content: space-between;
+  -webkit-justify-content: space-between;
+}
+
+.text-white {
+  color: white !important;
+}
+button:hover {
+  opacity: .8;
+}

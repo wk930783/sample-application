@@ -1,0 +1,36 @@
+<h1 mat-dialog-title>帳號資料</h1>
+<form mat-dialog-content class="dlg-content" [formGroup]="formGroup">
+  <mat-form-field>
+    <mat-label>Name</mat-label>
+    <input name="name" matInput formControlName="name">
+    <mat-error *ngIf="name.invalid && (name.dirty || name.touched)">
+      <ng-container *ngIf="name.hasError('required')">Please input name</ng-container>
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Country</mat-label>
+    <input name="country" matInput formControlName="country">
+    <mat-error *ngIf="country.invalid && (country.dirty || country.touched)">
+      <ng-container *ngIf="country.hasError('required')">Please input country</ng-container>
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Salary</mat-label>
+    <input name="salary" matInput formControlName="salary">
+    <mat-error *ngIf="salary.invalid && (salary.dirty || salary.touched)">
+      <ng-container *ngIf="salary.hasError('required')">Please input salary</ng-container>
+    </mat-error>
+  </mat-form-field>
+  <mat-form-field>
+    <mat-label>Email</mat-label>
+    <input name="email" matInput formControlName="email">
+    <mat-error *ngIf="email.invalid && (email.dirty || email.touched)">
+      <ng-container *ngIf="email.hasError('required')">Please input email</ng-container>
+      <ng-container *ngIf="!email.hasError('required') && email.hasError('email')">Please input valid email</ng-container>
+    </mat-error>
+  </mat-form-field>
+</form>
+<div mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">取消</button>
+  <button mat-button (click)="onSubmit()" [disabled]="formGroup.invalid">確定</button>
+</div>

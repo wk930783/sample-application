@@ -1,0 +1,23 @@
+<div class="person-listing">
+  <div class="flex-row align-items-center" style="height: 48px;">
+    <form class="flex-row" (ngSubmit)="advancedSearch()" action="update-team">
+      <div class="flex-row align-items-center" style="gap: 8px">
+        <label for="person">Serch by name : </label>
+        <div id="person">
+          <input name="name" matInput placeholder="查詢姓名或帳號" [(ngModel)]="queryParamsForm.name">
+        </div>
+      </div>
+    </form>
+    <button class="flex-row bg-purple" style="margin-left: 8px" mat-flat-button (click)="advancedSearch()">查詢</button>
+    <button class="flex-row bg-purple" style="margin-left: auto" mat-flat-button (click)="createMemberDlg()">新增</button>
+  </div>
+  <app-common-table
+    [tableData]="personList"
+    [tableColumnDefs]="tableColumnDefs"
+    [operateItems]="operateItems"
+    [showTotal]="true"
+    [totalField]="'salary'"
+    [dataPkKey]="'id'"
+  >
+  </app-common-table>
+</div>

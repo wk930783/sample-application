@@ -1,0 +1,16 @@
+section {
+  padding: 20px 0 20px 16px;
+}
+.menu-list {
+  color: #117e96;
+  text-decoration: none;
+  padding: 4px 8px 4px 16px;
+  border-left: 2px solid #117e96;
+}
+
+.menu-list:hover,
+.menu-selected {
+  color: #009CAD !important;
+  text-decoration: none;
+  border-left: 2px solid #009CAD;
+}

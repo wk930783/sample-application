@@ -1,0 +1,35 @@
+.home {
+  height: 100%;
+}
+
+.page-content {
+  padding: 20px 16px;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+}
+
+@media (min-width:1441px){
+  .page-content {
+    padding: 20px 20%;
+  }
+}
+
+@media (max-width:1440px){
+  .page-content {
+    padding: 20px 15%;
+  }
+}
+
+
+@media (max-width:950px){
+  .page-content {
+    padding: 20px 10%;
+  }
+}
+
+@media (max-width:756px){
+  .page-content {
+    padding: 20px 6%;
+  }
+}
