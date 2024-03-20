@@ -7,7 +7,7 @@ import { Menu } from 'src/app/models/menu.model';
 @Component({
   selector: 'app-left-sidenav',
   templateUrl: './left-sidenav.component.html',
-  styleUrls: ['./left-sidenav.component.css']
+  styleUrls: ['./left-sidenav.component.scss']
 })
 export class LeftSidenavComponent implements OnInit {
   menuList: Menu[] = [];
