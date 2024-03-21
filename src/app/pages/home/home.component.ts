@@ -1,10 +1,9 @@
 import { Component } from '@angular/core';
 import { OperateItem, TableColumnDef } from 'src/app/common-components/common-table/common-table.model';
-import { EditPersonParams, GetPersonListParams, Person } from 'src/app/models/person.model';
-import { PersonService } from 'src/app/services/person.service';
-import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { EditUserParams, GetUserListParams, User } from 'src/app/models/user.model';
+import { UserService } from 'src/app/services/user.service';
+import { MatDialog } from '@angular/material/dialog';
 import * as _ from 'lodash'
-import { PersonDialogComponent } from './pages/person-listing/components/person-dialog/person-dialog.component';
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn, Validators } from '@angular/forms';
 
 @Component({
@@ -13,22 +12,31 @@ import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn,
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent {
-  personList: Person[] = [];
-  tableColumnDefs!: TableColumnDef<Person>[];
-  operateItems: OperateItem<Person>[] = [];
-  queryParams: GetPersonListParams = {
+  /** 人員列表 */
+  userList: User[] = [];
+  /** table欄位定義 */
+  tableColumnDefs!: TableColumnDef<User>[];
+  /** table操作定義 */
+  operateItems: OperateItem<User>[] = [];
+  /** 查詢參數 */
+  queryParams: GetUserListParams = {
     name: '',
     country: '',
     salary: null,
     email: '',
     id: ''
   }
-  queryParamsForm: GetPersonListParams = {
+  /** 查詢參數 查詢表單用 */
+  queryParamsForm: GetUserListParams = {
     name: '',
   }
-  selectPerson?: Person;
+  /** 已選擇編輯的資料 */
+  selectUser?: User;
+  /** user表單類型（編輯或新增user） */
   formType!: 'Edit' | 'Create';
+  /** 是否顯示user表單 */
   visibleUserForm = false;
+  /** user表單使用的響應式表單 */
   formGroup!: FormGroup;
   get name(): FormControl {
     return this.formGroup.controls['name'] as FormControl;
@@ -43,7 +51,7 @@ export class HomeComponent {
     return this.formGroup.controls['email'] as FormControl;
   }
   constructor(
-    private personService: PersonService,
+    private userService: UserService,
     public dialog: MatDialog
   ) {
 
@@ -51,23 +59,24 @@ export class HomeComponent {
   ngOnInit(): void {
     this.setTableCoulumnDefs();
     this.setOperateItems();
-    this.getPersonList();
+    this.getUserList();
   }
   /** 獲取人員資料 */
-  getPersonList(): void {
-    this.personService.getPersonList(this.queryParams).subscribe({
-      next: (personList) => {
-        this.personList = personList;
+  getUserList(): void {
+    this.userService.getUserList(this.queryParams).subscribe({
+      next: (userList) => {
+        this.userList = userList;
       }
     })
   }
   /** 新增人員 */
-  createPerson(person: Person){
-    const subscripiton = this.personService.createPerson(person).subscribe({
+  createUser(user: User){
+    const subscripiton = this.userService.createUser(user).subscribe({
       next:(success) =>{
+        /** 新增成功後關閉表單與重新查詢資料 */
         if(success){
           this.closeUserForm();
-          this.getPersonList();
+          this.getUserList();
         }
       },
       complete: ()=>{
@@ -76,19 +85,20 @@ export class HomeComponent {
     });
   }
   /** 編輯人員資料 */
-  editPerson(person: Person){
-    const params: EditPersonParams = {
-      id: person.id!,
-      name: person.name,
-      country: person.country,
-      salary: person.salary,
-      email: person.email
+  editUser(user: User){
+    const params: EditUserParams = {
+      id: user.id!,
+      name: user.name,
+      country: user.country,
+      salary: user.salary,
+      email: user.email
     }
-    const subscripiton = this.personService.editPerson(params).subscribe({
+    const subscripiton = this.userService.editUser(params).subscribe({
       next:(success) =>{
+        /** 修改成功後關閉表單與重新查詢資料 */
         if(success){
           this.closeUserForm();
-          this.getPersonList();
+          this.getUserList();
         }
       },
       complete: ()=>{
@@ -98,19 +108,20 @@ export class HomeComponent {
   }
   /** 刪除人員資料 */
   deleteUser(id: string) {
-    this.personService.deletePerson(id).subscribe({
+    this.userService.deleteUser(id).subscribe({
       next: (success) => {
+        /** 刪除成功後重新查詢資料, 如果已經打開user表單且剛好刪除該筆資料,則關閉user表單 */
         if(success) {
-          if(this.selectPerson && this.selectPerson.id === id) {
+          if(this.selectUser && this.selectUser.id === id) {
             this.closeUserForm();
           }
-          this.getPersonList();
+          this.getUserList();
         }
       }
     });
   }
   /** 設定響應式表單 */
-  setFormGroup(user: Person) {
+  setFormGroup(user: User) {
     this.formGroup = new FormGroup({
       name: new FormControl(user.name, Validators.required),
       country: new FormControl(user.country, Validators.required),
@@ -148,13 +159,13 @@ export class HomeComponent {
     this.operateItems = [
       {
         name: 'Edit',
-        handleOperate: (data: Person) => {
+        handleOperate: (data: User) => {
           this.editUserForm(data);
         }
       },
       {
         name: 'Delete',
-        handleOperate: (data: Person) => {
+        handleOperate: (data: User) => {
           this.deleteUser(data.id!);
         }
       }
@@ -168,48 +179,52 @@ export class HomeComponent {
   /** 關閉人員表單 */
   closeUserForm() {
     this.visibleUserForm = false;
+    // 關閉時將響應式表單重置
     this.formGroup.reset();
   }
-  submitForm(person: Person, type: 'Edit' | 'Create') {
-    console.log(type,person);
+  /** 儲存/提交表單 */
+  submitForm(user: User, type: 'Edit' | 'Create') {
+    console.log(type,user);
     if(type === 'Edit') {
-      person.id = this.selectPerson!.id;
-      this.editPerson(person);
-    } else {
-      this.createPerson(person);
+      user.id = this.selectUser!.id;
+      this.editUser(user);
+    } else if(type === 'Create'){
+      this.createUser(user);
     }
   }
   /** 新增人員表單 */
   createUserForm() {
-    const person: Person = {
+    const user: User = {
       name: '',
       country: '',
       salary: 0,
       email: ''
     };
-    this.selectPerson = undefined;
+    // 新增user時, 將已選擇編輯的資料設置為空
+    this.selectUser = undefined;
     this.formType = 'Create';
-    this.setFormGroup(person)
+    this.setFormGroup(user)
     this.openUserForm();
   }
   /** 編輯人員開窗 */
-  editUserForm(person: Person) {
+  editUserForm(user: User) {
     this.formType = 'Edit';
-    this.selectPerson = _.cloneDeep(person);
-    this.setFormGroup(person);
+    this.selectUser = _.cloneDeep(user);
+    this.setFormGroup(user);
     this.openUserForm();
   }
   /** 進階查詢 */
   advancedSearch() {
     this.queryParams.name = this.queryParamsForm.name;
-    this.getPersonList();
+    this.getUserList();
   }
   /** 自定義驗證 有無重複值 */
-  wordValidator(field: keyof Person): ValidatorFn {
+  wordValidator(field: keyof User): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const inputValue: any = control.value;
-      const personList = this.selectPerson ? this.personList.filter(p => p.id !== this.selectPerson!.id) : _.cloneDeep(this.personList);
-      const isDuplicate: boolean = personList.map(p => p[field]).includes(inputValue);
+      // 如果selectUser有資料,則過濾掉selectUser的資料
+      const userList = this.selectUser ? this.userList.filter(p => p.id !== this.selectUser!.id) : _.cloneDeep(this.userList);
+      const isDuplicate: boolean = userList.map(p => p[field]).includes(inputValue);
 
       if (isDuplicate) {
         return { uniqueValue: true }; // 自訂錯誤名稱為 uniqueValue

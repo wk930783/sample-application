@@ -1,5 +1,5 @@
 /** 人員 實體 */
-export interface Person {
+export interface User {
   id?: string;
   name: string;
   country: string;
@@ -7,7 +7,7 @@ export interface Person {
   email: string;
 };
 /** 獲取人員列表 傳參 */
-export type GetPersonListParams = {
+export type GetUserListParams = {
   name?: string;
   country?: string;
   salary?: number | null;
@@ -15,14 +15,14 @@ export type GetPersonListParams = {
   id?: string;
 }
 /** 新增人員 傳參 */
-export type CreatePersonParams = {
+export type CreateUserParams = {
   name: string;
   country: string;
   salary: number;
   email: string;
 }
 /** 編輯人員 傳參 */
-export type EditPersonParams = {
+export type EditUserParams = {
   id: string;
   name: string;
   country: string;

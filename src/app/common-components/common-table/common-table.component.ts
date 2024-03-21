@@ -86,7 +86,7 @@ export class CommonTableComponent<DataT> implements OnChanges, AfterContentInit 
     });
     this.viewColumnDefs = this._createViewTableCoumnDef();
   }
-
+  /* 回傳一個view用的表單定義 */
   private _createViewTableCoumnDef(): ViewColumnDef<DataT>[] {
     return this.tableColumnDefs.map((columnDef: TableColumnDef<DataT>) => {
       const cloneDef: TableColumnDef<DataT> = _.cloneDeep(columnDef);
@@ -97,17 +97,13 @@ export class CommonTableComponent<DataT> implements OnChanges, AfterContentInit 
       return viewDef;
     });
   }
-
+  /** ngFor使用, 表身使用 */
   trackByFn(index: number, data: DataT): string {
     return String(data[this.dataPkKey]) ?? index; // 假設每個項目都有一個唯一的 id 屬性
   }
+  /** ngFor使用 */
   trackByFnIndex(index: number) {
     return index;
-  }
-
-  // 列表 数据表格页码变化
-  tableHandle(event: any, type: string, oldValue: number): any {
-    this.pageChangeEvent(event);
   }
 
   /**頁數 單頁總數 變更事件 */
@@ -132,7 +128,9 @@ export class CommonTableComponent<DataT> implements OnChanges, AfterContentInit 
   setTotal() {
     if(this.viewData.length) {
       const startIndex = this.pageIndex * this.pageSize;
+      // 如果計算出的endIndex 超出資料長度, 則改為資料長度
       const endIndex = (this.pageIndex + 1) * this.pageSize > this.viewData.length ? this.viewData.length : (this.pageIndex + 1) * this.pageSize;
+      // 過濾出當前顯示在畫面上的資料的number陣列(透過totalField去指定要計算哪個欄位)
       const numbers = this.viewData.slice(startIndex, endIndex).map(data => Number(data[this.totalField!]));
       if(numbers.length === 0  && this.pageIndex > 0){
         // 如果numbers為undefined 且 頁籤在第一頁以後

@@ -1,17 +1,22 @@
 <div class="flex-column common-table">
   <div class="table-outside" [ngClass]="{'table-outside-min': showTotal}">
+    <!-- 表單 -->
     <table #commonTable class="table">
+      <!-- 表頭 -->
       <thead>
         <tr>
+          <!-- 使用ngFor列表定義生程表頭 -->
           <ng-container *ngFor="let columnDef of tableColumnDefs; trackBy: trackByFnIndex">
             <th [id]="columnDef.dataKey" [ngStyle]="{ minWidth: columnDef.widthOfTable, maxWidth: columnDef.widthOfTable}">
               {{columnDef.headerNames}}
             </th>
           </ng-container>
+          <!-- 如果有設定operate,最右側多一個th -->
           <th *ngIf="operateItems.length > 0">
           </th>
         </tr>
       </thead>
+      <!-- 表身 -->
       <tbody>
         <ng-container
           *ngFor="
@@ -20,11 +25,13 @@
             trackBy: trackByFn
           "
         >
+          <!-- ngIf 約束列表顯示的資料數量(例如1~10筆, 10~20筆) -->
           <tr *ngIf="indexFromViewData >= pageSize * pageIndex && indexFromViewData < pageSize * (pageIndex + 1)" [ngClass]="{'tr-dark': indexFromViewData % 2 === 0}">
             <ng-container
               *ngFor="let columnDef of viewColumnDefs;let indexFromColumnDef = index">
               <td>
                 <div class="flex-row align-items-center justify-content-center" style="width: 100%">
+                  <!-- 從外部透過directive傳入的模板顯示位置 -->
                   <ng-container *ngIf="fieldDirective?.fieldTemplateRef">
                     <ng-container
                     *ngTemplateOutlet="
@@ -40,10 +47,11 @@
                     "
                     ></ng-container>
                   </ng-container>
-
+                  <!-- 如果需要在表身內顯示欄位名稱, 可設置fieldName -->
                   <span *ngIf="columnDef.fieldName">
                     {{columnDef.fieldName}}
                   </span>
+                  <!-- 如果有透過directiv傳入模板ㄝ,可設置hiddenKey 隱藏預設內容 -->
                   <div class="td-content" [hidden]="columnDef.hiddenKey" [ngStyle]="{ minWidth: columnDef.widthOfTable, maxWidth: columnDef.widthOfTable}">
                     {{data[columnDef.dataKey]}}
                   </div>
@@ -71,5 +79,6 @@
       </tbody>
     </table>
   </div>
+  <!-- 頁碼元件 -->
   <mat-paginator [length]="viewData.length" [pageSize]="pageSize" [pageIndex]="pageIndex" (page)="pageChangeEvent($event)" [pageSizeOptions]="tablePageOptions" showFirstLastButtons></mat-paginator>
 </div>

@@ -1,12 +1,12 @@
 import { Injectable } from '@angular/core';
 import { from, Observable, tap } from 'rxjs';
-import { CreatePersonParams, EditPersonParams, GetPersonListParams, Person } from '../models/person.model';
+import { CreateUserParams, EditUserParams, GetUserListParams, User } from '../models/user.model';
 import * as _ from 'lodash';
 @Injectable({
   providedIn: 'root'
 })
-export class PersonService {
-  mockPersonList: Person[] = [
+export class UserService {
+  mockUserList: User[] = [
     {
       name: 'Baha',
       country: 'Sacrum Romanum Imperium',
@@ -32,11 +32,11 @@ export class PersonService {
   constructor(
   ) { }
   /** 獲取全部人員 */
-  getPersonList(params: GetPersonListParams): Observable<Person[]> {
-    return from(new Promise<Person[]>((resolve,reject)=>{
-      let result: Person[] = _.clone(this.mockPersonList);
+  getUserList(params: GetUserListParams): Observable<User[]> {
+    return from(new Promise<User[]>((resolve,reject)=>{
+      let result: User[] = _.clone(this.mockUserList);
       if(params.id) {
-        result = result.find(p => p.id === params.id) ? [this.mockPersonList.find(p => p.id === params.id)!] : [];
+        result = result.find(p => p.id === params.id) ? [this.mockUserList.find(p => p.id === params.id)!] : [];
       }
       if(params.email) {
         result = result.filter(r => r.email.toLowerCase().includes(params.email!.toLowerCase()));
@@ -54,8 +54,8 @@ export class PersonService {
     }));
   }
   /** 新增人員 */
-  createPerson(params: CreatePersonParams): Observable<boolean> {
-    let person: Person = {
+  createUser(params: CreateUserParams): Observable<boolean> {
+    let user: User = {
       id: '',
       name: params.name,
       country: params.country,
@@ -63,37 +63,37 @@ export class PersonService {
       email: params.email
     }
     let id = Math.random().toString(36).substring(2, 18);
-    const ids = this.mockPersonList.map(p => p.id);
+    const ids = this.mockUserList.map(p => p.id);
     while(ids.includes(id)) {
       id = Math.random().toString(36).substring(2, 18);
     }
-    person.id = id;
-    this.mockPersonList.splice(0, 0, person);
+    user.id = id;
+    this.mockUserList.splice(0, 0, user);
     return from(new Promise<boolean>((resolve,reject)=>{
       resolve(true);
     }));
   }
   /** 編輯人員 */
-  editPerson(params: EditPersonParams): Observable<boolean> {
-    const person = this.mockPersonList.find(p => p.id === params.id);
-    if(person) {
-      person.name = params.name;
-      person.email = params.email;
-      person.salary = params.salary;
-      person.country = params.country;
+  editUser(params: EditUserParams): Observable<boolean> {
+    const user = this.mockUserList.find(p => p.id === params.id);
+    if(user) {
+      user.name = params.name;
+      user.email = params.email;
+      user.salary = params.salary;
+      user.country = params.country;
     }
     return from(new Promise<boolean>((resolve,reject)=>{
       resolve(true);
     }));
   }
   /** 刪除人員 */
-  deletePerson(id: string): Observable<boolean> {
+  deleteUser(id: string): Observable<boolean> {
     return from(new Promise<boolean>((resolve,reject)=>{
       resolve(true);
     })).pipe(
       tap(()=>{
-        const index = this.mockPersonList.findIndex(person => person.id === id);
-        this.mockPersonList.splice(index, 1);
+        const index = this.mockUserList.findIndex(user => user.id === id);
+        this.mockUserList.splice(index, 1);
       })
     );
   }
