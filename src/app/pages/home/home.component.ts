@@ -66,6 +66,7 @@ export class HomeComponent {
     const subscripiton = this.personService.createPerson(person).subscribe({
       next:(success) =>{
         if(success){
+          this.closeUserForm();
           this.getPersonList();
         }
       },
@@ -86,6 +87,7 @@ export class HomeComponent {
     const subscripiton = this.personService.editPerson(params).subscribe({
       next:(success) =>{
         if(success){
+          this.closeUserForm();
           this.getPersonList();
         }
       },
@@ -206,7 +208,8 @@ export class HomeComponent {
   wordValidator(field: keyof Person): ValidatorFn {
     return (control: AbstractControl): ValidationErrors | null => {
       const inputValue: any = control.value;
-      const isDuplicate: boolean = !this.selectPerson ? false : this.personList.filter(p => p.id !== this.selectPerson!.id).map(p => p[field]).includes(inputValue);
+      const personList = this.selectPerson ? this.personList.filter(p => p.id !== this.selectPerson!.id) : _.cloneDeep(this.personList);
+      const isDuplicate: boolean = personList.map(p => p[field]).includes(inputValue);
 
       if (isDuplicate) {
         return { uniqueValue: true }; // 自訂錯誤名稱為 uniqueValue
