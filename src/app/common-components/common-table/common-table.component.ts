@@ -40,7 +40,7 @@ export class CommonTableComponent<DataT> implements OnChanges, AfterContentInit 
   @Input() pageSize = 10; // 單頁要顯示的資料數量
   @Input() pageIndex = 0; // 頁數最低為1
   @Input() dataTotalRows = 0; //資料總數
-  @Input() tablePageOptions: number[] = [10, 20, 30, 40]; // 数据 分页选择
+  @Input() tablePageOptions: number[] = [5, 10, 20, 30, 40]; // 数据 分页选择
   @Input() operateItems: OperateItem<TableData<DataT>>[] = []; //操作內容
   @Input() showTotal = false; // 顯示總數
   @Input() totalField?: keyof DataT; // total的欄位名稱
