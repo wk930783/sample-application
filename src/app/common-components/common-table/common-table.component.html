@@ -1,25 +1,4 @@
 <div class="flex-column common-table">
-  <div
-    *ngIf="tableType === 'edit'"
-    class="flex flex-row align-items-center justify-end mb-4 common-table-button-set"
-  >
-
-    <button class="bg-blue text-white" [hidden]="isEdit" (click)="doEdit()" mat-flat-button>
-      編輯
-    </button>
-    <button
-      class="text-white mr-4"
-      style="background-color: #c0c0c0;"
-      [hidden]="!isEdit"
-      (click)="doCancelEdit()"
-      mat-flat-button
-    >
-    取消
-    </button>
-    <button class="bg-blue text-white" [hidden]="!isEdit" (click)="saveEditDlg()" mat-flat-button>
-      確認
-    </button>
-  </div>
   <div class="table-outside" [ngClass]="{'table-outside-min': showTotal}">
     <table #commonTable class="table">
       <thead>
@@ -30,7 +9,6 @@
             </th>
           </ng-container>
           <th *ngIf="operateItems.length > 0">
-            操作
           </th>
         </tr>
       </thead>
@@ -42,11 +20,11 @@
             trackBy: trackByFn
           "
         >
-          <tr *ngIf="indexFromViewData >= pageSize * pageIndex && indexFromViewData < pageSize * (pageIndex + 1)">
+          <tr *ngIf="indexFromViewData >= pageSize * pageIndex && indexFromViewData < pageSize * (pageIndex + 1)" [ngClass]="{'tr-dark': indexFromViewData % 2 === 0}">
             <ng-container
               *ngFor="let columnDef of viewColumnDefs;let indexFromColumnDef = index">
               <td>
-                <div class="flex-row align-items-center" style="width: 100%">
+                <div class="flex-row align-items-center justify-content-center" style="width: 100%">
                   <ng-container *ngIf="fieldDirective?.fieldTemplateRef">
                     <ng-container
                     *ngTemplateOutlet="
@@ -66,52 +44,19 @@
                   <span *ngIf="columnDef.fieldName">
                     {{columnDef.fieldName}}
                   </span>
-                  <div class="td-content" [hidden]="(isEdit && columnDef.needEdit) || columnDef.hiddenKey" [ngStyle]="{ minWidth: columnDef.widthOfTable, maxWidth: columnDef.widthOfTable}">
+                  <div class="td-content" [hidden]="columnDef.hiddenKey" [ngStyle]="{ minWidth: columnDef.widthOfTable, maxWidth: columnDef.widthOfTable}">
                     {{data[columnDef.dataKey]}}
                   </div>
-                  <input
-                    standalone
-                    style="flex: 1;color: #000"
-                    [ngStyle]="{ 'max-width': columnDef.widthOfInput ?? '50%' }"
-                    *ngIf="columnDef.needEdit && columnDef.inputType === 'text'"
-                    [hidden]="!isEdit"
-
-                    [(ngModel)]="data[columnDef.dataKey]"
-                    (ngModelChange)="valueChange()"
-                    [name]="columnDef.dataKey.toString()"
-                  />
-                  <textarea
-                  standalone
-                    style="flex: 1;color: #000"
-                    [ngStyle]="{ 'max-width': columnDef.widthOfInput ?? '50%' }"
-                    *ngIf="columnDef.needEdit && columnDef.inputType === 'textarea'"
-                    [hidden]="!isEdit"
-
-                    [(ngModel)]="data[columnDef.dataKey]"
-                    (ngModelChange)="valueChange()"
-                    [name]="columnDef.dataKey.toString()"
-                  ></textarea>
-                  <input standalone type="number" [name]="columnDef.dataKey.toString()" min="0" max="100" style="flex: 1;color: #000; width: 100%"
-                  [ngStyle]="{ 'max-width': columnDef.widthOfInput ?? '100%' }"
-                  *ngIf="columnDef.needEdit && columnDef.inputType === 'number'"
-                  [hidden]="!isEdit"
-                  [value]="data[columnDef.dataKey]"
-                  [(ngModel)]="data[columnDef.dataKey]"
-                  (ngModelChange)="numberValueChange(data,columnDef.dataKey)"
-                  >
                 </div>
               </td>
             </ng-container>
             <!-- 操作 -->
             <td *ngIf="operateItems.length > 0">
-              <button mat-icon-button [matMenuTriggerFor]="operateMenu" aria-label="Example icon button with a vertical three dot icon">
-                <mat-icon>more_vert</mat-icon>
-              </button>
-              <mat-menu #operateMenu="matMenu">
-                <ng-container *ngFor="let operateItem of operateItems">
-                  <button class="operate-button" mat-menu-item style="mini-height: 32px" (click)="operateItem.handleOperate(data)">{{operateItem.name}}</button>
-                </ng-container>
-              </mat-menu>
+              <ng-container *ngFor="let operateItem of operateItems; let i = index">
+                <button class="flex-row font-color-white" [ngClass]="{'edit-btn': operateItem.name === 'Edit', 'delete-btn': operateItem.name === 'Delete'}"  [ngStyle]="{'margin-left': i === 1 ? '2em' : '0'}" mat-flat-button (click)="operateItem.handleOperate(data)">
+                  {{operateItem.name}}
+                </button>
+              </ng-container>
             </td>
           </tr>
         </ng-container>
@@ -126,5 +71,5 @@
       </tbody>
     </table>
   </div>
-  <mat-paginator [length]="viewData.length" [pageSize]="pageSize" [pageIndex]="pageIndex" (page)="pageChangeEvent($event)" [pageSizeOptions]="[5, 10, 25, 100]" showFirstLastButtons></mat-paginator>
+  <mat-paginator [length]="viewData.length" [pageSize]="pageSize" [pageIndex]="pageIndex" (page)="pageChangeEvent($event)" [pageSizeOptions]="tablePageOptions" showFirstLastButtons></mat-paginator>
 </div>

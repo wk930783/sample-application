@@ -12,10 +12,17 @@
   --color-blue: #3db9a4;
   --color-blue2: #7bcec0;
   --color-pink: #ec7bb4;
+  --color-green: #5cb85c;
+  --color-green2: #4cae4c;
 }
 
 blockquote, dl, dd, h1, h2, h3, h4, h5, h6, hr, figure, p, pre {
   margin: 0;
+}
+
+.font-color-white {
+  color: white;
+  -webkit-text-fill-color: white;
 }
 
 .bg-purple {
@@ -33,6 +40,13 @@ blockquote, dl, dd, h1, h2, h3, h4, h5, h6, hr, figure, p, pre {
 }
 .bg-pink {
   background-color: var(--color-pink) !important;
+}
+.bg-green {
+  background-color: var(--color-green) !important;
+}
+
+.border-green2 {
+  box-shadow: 0 0 0 1px var(--color-green2);
 }
 
 /* You can add global styles to this file, and also import other style files */

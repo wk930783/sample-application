@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { from, Observable, tap } from 'rxjs';
 import { CreatePersonParams, EditPersonParams, GetPersonListParams, Person } from '../models/person.model';
-import { BaseApiService } from './base-api.service';
 import * as _ from 'lodash';
 @Injectable({
   providedIn: 'root'
@@ -28,73 +27,9 @@ export class PersonService {
       salary: 1,
       email: 'plato@xxx.xxx',
       id: ' user000003'
-    },
-    {
-      name: 'Baha',
-      country: 'Sacrum Romanum Imperium',
-      salary: 3,
-      email: 'baha@xxx.xxx',
-      id: ' user000001'
-    },
-    {
-      name: 'Voltaire',
-      country: 'France',
-      salary: 3,
-      email: 'voltaire@xxx.xxx',
-      id: ' user000002'
-    },
-    {
-      name: 'Plato',
-      country: 'Greece',
-      salary: 1,
-      email: 'plato@xxx.xxx',
-      id: ' user000003'
-    },
-    {
-      name: 'Baha',
-      country: 'Sacrum Romanum Imperium',
-      salary: 3,
-      email: 'baha@xxx.xxx',
-      id: ' user000001'
-    },
-    {
-      name: 'Voltaire',
-      country: 'France',
-      salary: 3,
-      email: 'voltaire@xxx.xxx',
-      id: ' user000002'
-    },
-    {
-      name: 'Plato',
-      country: 'Greece',
-      salary: 1,
-      email: 'plato@xxx.xxx',
-      id: ' user000003'
-    },
-    {
-      name: 'Baha',
-      country: 'Sacrum Romanum Imperium',
-      salary: 3,
-      email: 'baha@xxx.xxx',
-      id: ' user000001'
-    },
-    {
-      name: 'Voltaire',
-      country: 'France',
-      salary: 3,
-      email: 'voltaire@xxx.xxx',
-      id: ' user000002'
-    },
-    {
-      name: 'Plato',
-      country: 'Greece',
-      salary: 1,
-      email: 'plato@xxx.xxx',
-      id: ' user000003'
     }
   ]
   constructor(
-    private baseApiService: BaseApiService
   ) { }
   /** 獲取全部人員 */
   getPersonList(params: GetPersonListParams): Observable<Person[]> {
@@ -104,20 +39,19 @@ export class PersonService {
         result = result.find(p => p.id === params.id) ? [this.mockPersonList.find(p => p.id === params.id)!] : [];
       }
       if(params.email) {
-        result = result.filter(r => r.email.includes(params.email!));
+        result = result.filter(r => r.email.toLowerCase().includes(params.email!.toLowerCase()));
       }
       if(params.name) {
-        result = result.filter(r => r.name.includes(params.name!));
+        result = result.filter(r => r.name.toLowerCase().includes(params.name!.toLowerCase()));
       }
       if(params.country) {
-        result = result.filter(r => r.country.includes(params.country!));
+        result = result.filter(r => r.country.toLowerCase().includes(params.country!.toLowerCase()));
       }
       if(params.salary) {
         result = result.filter(r => (r.salary + '').includes(params.salary! + ''));
       }
       resolve(result);
     }));
-    return this.baseApiService.post<Person[]>('/allPerson', params);
   }
   /** 新增人員 */
   createPerson(params: CreatePersonParams): Observable<boolean> {
@@ -138,7 +72,6 @@ export class PersonService {
     return from(new Promise<boolean>((resolve,reject)=>{
       resolve(true);
     }));
-    return this.baseApiService.post<boolean>('/allPerson', params);
   }
   /** 編輯人員 */
   editPerson(params: EditPersonParams): Observable<boolean> {
@@ -152,7 +85,6 @@ export class PersonService {
     return from(new Promise<boolean>((resolve,reject)=>{
       resolve(true);
     }));
-    return this.baseApiService.post<boolean>('/allPerson', params);
   }
   /** 刪除人員 */
   deletePerson(id: string): Observable<boolean> {
@@ -164,6 +96,5 @@ export class PersonService {
         this.mockPersonList.splice(index, 1);
       })
     );
-    return this.baseApiService.delete<boolean>(`/deletePerson`,{id: id});
   }
 }

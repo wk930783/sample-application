@@ -18,8 +18,6 @@ export interface TableColumnDef<T> {
   // 欄位內名稱
   fieldName?: string;
   formatFunc?: (data: T) => string;
-  // 欄位是否開放編輯
-  needEdit?: boolean;
   fieldTemplate?: TemplateRef<any>;
   // 是否固定最右邊
   dwRight?: boolean;
@@ -27,8 +25,6 @@ export interface TableColumnDef<T> {
   dwLeft?: boolean;
   // 是否隱藏key
   hiddenKey?: boolean;
-  // 輸入匡類型
-  inputType?: InputType;
   // 數字輸入匡最大值
   dwMax?: number;
   // 數字輸入框最小值

@@ -1,5 +1,0 @@
-<section class="flex flex-col">
-  <ng-container *ngFor="let menu of menuList">
-    <a *ngIf="menu.code !== 'u001'" class="menu-list" [ngClass]="{'menu-selected': menu.code === nowMenuCode}" mat-button [routerLink]="menu.link" (click)="changeNowMenuCode(menu.code)">{{menu.name}}</a>
-  </ng-container>
-</section>

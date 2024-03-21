@@ -1,10 +1,10 @@
 <div class="person-listing">
   <div class="flex-row align-items-center" style="height: 48px;">
     <form class="flex-row" (ngSubmit)="advancedSearch()" action="update-team">
-      <div class="flex-row align-items-center" style="gap: 8px">
+      <div class="flex-row align-items-center" style="gap: 8px; margin-bottom: 8px">
         <label for="person">Serch by name : </label>
         <div id="person">
-          <input name="name" matInput placeholder="查詢姓名或帳號" [(ngModel)]="queryParamsForm.name">
+          <input matInput placeholder="查詢姓名或帳號" [(ngModel)]="queryParams.name">
         </div>
       </div>
     </form>
