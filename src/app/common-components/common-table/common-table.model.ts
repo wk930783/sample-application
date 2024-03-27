@@ -1,11 +1,13 @@
 import { TemplateRef } from '@angular/core';
 import { CommonTableFieldTemplateDirective } from './common-table-field-template.directive';
 export type OrNull<Type> = Type | null;
+/* 映射用 */
 export type PickObj<T, U extends keyof T> = T[U];
-export type InputType = 'text' | 'number' | 'textarea';
+/* 實際綁定在html上的資料實體 */
 export interface ViewColumnDef<T> extends TableColumnDef<T> {
   fieldDirective: OrNull<CommonTableFieldTemplateDirective<T>>;
 }
+/* table欄位定義 */
 export interface TableColumnDef<T> {
   // 資料鍵值
   dataKey: keyof T;
@@ -30,21 +32,16 @@ export interface TableColumnDef<T> {
   // 數字輸入框最小值
   dwMin?: number;
 }
-
+/* 映射新類型讓model內也能使用到T */
 export type TableData<T> = {
   [key in keyof T]: PickObj<T, key>;
 };
-
-export interface QueryParams {
-  pageSize: number;
-  pageNum: number;
-}
-
+/* 操作 */
 export interface OperateItem<TableData> {
   name: string;
   handleOperate: (data: TableData) => void;
 }
-
+/* directive let-data帶入的資料格式 */
 export interface TableTemplateRefData<T> {
   /** 模板附帶資料 */
   $implicit: {
